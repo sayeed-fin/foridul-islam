@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foridul Islam-Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            background-color: #f0f4f8;
+            color: #334155;
+        }
+        .text-gradient {
+            background-image: linear-gradient(to right, #4c51bf, #6b46c1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .contact-icon {
+            transition: transform 0.3s ease;
+        }
+        .contact-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Custom styles for the new timeline-based Work Experience design */
+        .timeline {
+            position: relative;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: #d1d5db;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+            z-index: 0;
+        }
+        .timeline-container {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+        .timeline-container.left {
+            left: 0;
+        }
+        .timeline-container.right {
+            left: 50%;
+        }
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+            background-color: #4f46e5;
+            border: 4px solid #fff;
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .timeline-container.right::after {
+            left: -10px;
+        }
+        .timeline-content {
+            padding: 13px 13px;
+            background-color: #1a202c;
+            position: relative;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        .timeline-container.left .timeline-content {
+            border-left: 5px solid #4f46e5;
+        }
+        .timeline-container.right .timeline-content {
+            border-right: 5px solid #4f46e5;
+        }
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 20px;
+            }
+            .timeline-container {
+                width: 100%;
+                padding-left: 60px;
+                padding-right: 15px;
+            }
+            .timeline-container.right {
+                left: 0;
+            }
+            .timeline-container.left::after {
+                left: 10px;
+            }
+            .timeline-container.right::after {
+                left: 10px;
+            }
+            .timeline-container.right .timeline-content {
+                border-left: 5px solid #4f46e5;
+                border-right: none;
+            }
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: auto;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            max-width: 80%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.5s ease-out;
+        }
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            color: #aaa;
+            font-size: 2.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .close-btn:hover,
+        .close-btn:focus {
+            color: #000;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .project-image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .education-item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+        
+        /* New styles for the Hero Section and other background graphics */
+        .hero-section, .about-section, .contact-section {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .graphic-element {
+            position: absolute;
+            opacity: 0.1;
+            z-index: 1;
+            animation-duration: 10s;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+        }
+
+        .graphic-circle {
+            border-radius: 50%;
+            background-color: #4c51bf;
+            animation-name: pulse;
+        }
+
+        .graphic-square {
+            background-color: #6b46c1;
+            transform: rotate(45deg);
+            animation-name: float-rotate;
+        }
+
+        /* Specific positions and sizes for the elements in the Hero section */
+        .hero-section .graphic-element.one {
+            width: 250px;
+            height: 250px;
+            top: 5%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .hero-section .graphic-element.two {
+            width: 180px;
+            height: 180px;
+            bottom: 15%;
+            right: -5%;
+            animation-delay: 2s;
+        }
+
+        .hero-section .graphic-element.three {
+            width: 120px;
+            height: 120px;
+            top: 40%;
+            left: 25%;
+            animation-delay: 4s;
+        }
+
+        .hero-section .graphic-element.four {
+            width: 300px;
+            height: 300px;
+            bottom: 5%;
+            left: -15%;
+            animation-delay: 6s;
+        }
+
+        .hero-section .graphic-element.five {
+            width: 100px;
+            height: 100px;
+            top: -5%;
+            right: 15%;
+            animation-delay: 8s;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.1; }
+            50% { transform: scale(1.2); opacity: 0.3; }
+            100% { transform: scale(1); opacity: 0.1; }
+        }
+
+        @keyframes float-rotate {
+            0% { transform: rotate(45deg) translateY(0); }
+            50% { transform: rotate(55deg) translateY(-20px); }
+            100% { transform: rotate(45deg) translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-500">
+
+    <!-- Header / Navbar -->
+    <header class="bg-white dark:bg-white shadow-md sticky top-0 z-50 transition-colors duration-500">
+        <nav class="container mx-auto px-6 py-5 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-gray-900 dark:text-gray-900">
+                <img src="Nirjon logos-01.png" alt="Logo" class="h-8">
+            </a>
+            <div class="block">
+                <button id="menu-toggle" class="text-gray-900 dark:text-gray-900 focus:outline-none">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Side Menu (initially hidden) -->
+        <div id="mobile-menu" class="fixed top-0 right-0 w-72 h-screen bg-gray-900 z-50 transform translate-x-full transition-transform duration-500">
+            <div class="flex justify-end p-6">
+                <button id="close-menu" class="text-white text-3xl focus:outline-none">
+                    &times;
+                </button>
+            </div>
+            <div class="flex flex-col h-full p-8 text-white space-y-24">
+                <div class="flex flex-col items-center space-y-8">
+                    <a href="#" class="text-2xl font-semibold hover:text-indigo-400 transition-colors duration-300 menu-link">Home</a>
+                    <a href="#about" class="text-2xl font-semibold hover:text-indigo-400 transition-colors duration-300 menu-link">About</a>
+                    <a href="#portfolio" class="text-2xl font-semibold hover:text-indigo-400 transition-colors duration-300 menu-link">Portfolio</a>
+                    <a href="#contact" class="text-2xl font-semibold hover:text-indigo-400 transition-colors duration-300 menu-link">Contact</a>
+                </div>
+                <div class="flex flex-col items-center w-full">
+                    <p class="text-white text-lg font-semibold mb-4">Follow Me</p>
+                    <div class="flex justify-center space-x-6 text-white">
+                        <a href="https://behance.net/sayeed_fin" target="_blank" rel="noopener noreferrer" class="text-white hover:text-indigo-400 transition-colors duration-300 text-2xl"><i class="fab fa-behance"></i></a>
+                        <a href="https://twitter.com/Sayeed_fin" target="_blank" rel="noopener noreferrer" class="text-white hover:text-indigo-400 transition-colors duration-300 text-2xl"><i class="fab fa-twitter"></i></a>
+                        <a href="https://linkedin.com/in/sayeed-fin/" target="_blank" rel="noopener noreferrer" class="text-white hover:text-indigo-400 transition-colors duration-300 text-2xl"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://instagram.com/Sayeed.fin" target="_blank" rel="noopener noreferrer" class="text-white hover:text-indigo-400 transition-colors duration-300 text-2xl"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="hero-section min-h-screen py-16 md:py-24 flex items-center bg-gray-100 dark:bg-gray-900 transition-colors duration-500">
+        <div class="graphic-element graphic-circle one"></div>
+        <div class="graphic-element graphic-square two"></div>
+        <div class="graphic-element graphic-circle three"></div>
+        <div class="graphic-element graphic-square four"></div>
+        <div class="graphic-element graphic-circle five"></div>
+
+        <div class="container mx-auto px-6 flex flex-col md:flex-row items-center z-10">
+            <div class="md:w-1/2 text-center md:text-left">
+                <p class="text-xl text-indigo-600 mb-2">Hello, I'm a</p>
+                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4 text-gray-900 dark:text-white"><span class="text-gradient">Professional Graphic Designer</span></h1>
+                <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">I'm here to turn your creative ideas into reality. Check out my work and hire me for your next project.</p>
+                <a href="#portfolio" class="bg-indigo-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-indigo-700 transition duration-300 font-semibold transform hover:scale-105 inline-block">View My Work</a>
+            </div>
+            <div class="md:w-1/2 mt-8 md:mt-0 flex justify-center">
+                <img src="sayeed.fin.png" alt="Your Professional Photo" class="rounded-full shadow-xl w-64 h-64 md:w-80 md:h-80 object-cover border-4 border-white dark:border-gray-700">
+            </div>
+        </div>
+    </main>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 bg-white dark:bg-gray-800 transition-colors duration-500 about-section">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-start md:space-x-12">
+                <div class="md:w-1/2 mb-8 md:mb-0 w-full max-w-[280px] mx-auto text-center">
+                    <div class="bg-gray-50 dark:bg-gray-900 rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition-transform duration-300 w-full">
+                        <img src="nirjon.jpg" alt="Your Profile Photo" class="w-full h-auto object-cover rounded-t-lg">
+                        <div class="p-4 text-center">
+                            <h3 class="text-3xl font-bold text-gray-800 dark:text-white">Foridul Islam</h3>
+                            <p class="text-indigo-600 font-semibold mt-1 text-2xl">Graphic Designer</p>
+                        </div>
+                    </div>
+                    <!-- Download Resume Button -->
+                    <a href="#" download class="inline-block mt-4 bg-indigo-600 text-white py-2 px-6 rounded-lg shadow-lg hover:bg-indigo-700 transition duration-300 font-semibold transform hover:scale-105">
+                        <i class="fas fa-download mr-2"></i>Download Resume
+                    </a>
+                </div>
+                <div class="md:w-1/2 text-center md:text-left">
+                    <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">About Me</h2>
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">I am an experienced professional who is passionate about design, coding, and creativity. I love solving problems through my work and creating effective solutions. My goal is to transform your ideas into a beautiful and user-friendly experience.</p>
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">My journey in this field has been driven by a continuous desire to learn and grow. I have a strong foundation in a variety of design and development tools and am always eager to take on new challenges. I believe that good design is not just about aesthetics, but also about creating meaningful interactions that truly resonate with people.</p>
+                    <h3 class="text-2xl font-bold mt-8 mb-4 text-gray-900 dark:text-white">Education</h3>
+                    <div class="space-y-4">
+                        <div class="education-item">
+                            <h4 class="font-bold text-gray-900 dark:text-white text-lg">Diploma in Engineering (Graphic Design)</h4>
+                            <p class="text-gray-600 dark:text-gray-300">Gov. Graphic Arts Institute.</p>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">Passing Year-2023</p>
+                        </div>
+                        <div class="education-item">
+                            <h4 class="font-bold text-gray-900 dark:text-white text-lg">Higher Secondary Certificate (Science) BOU.</h4>
+                            <p class="text-gray-600 dark:text-gray-300">Sher-e- Bangla Nagar Govt. Boys High School, Dhaka</p>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">Passing Year-2023</p>
+                        </div>
+                        <div class="education-item">
+                            <h4 class="font-bold text-gray-900 dark:text-white text-lg">SSC/Dakhil (Science)</h4>
+                            <p class="text-gray-600 dark:text-gray-300">Shah Kamal Dakhil Madrasah.</p>
+                            <p class="text-600 dark:text-gray-300 text-sm">Passing Year-2019</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Experience Section -->
+    <section id="experience" class="py-16 bg-indigo-100 dark:bg-gray-900 transition-colors duration-500">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <h2 class="text-3xl font-bold text-center mb-10 text-gray-900 dark:text-white">Work Experience</h2>
+
+            <!-- Timeline Structure -->
+            <div class="timeline">
+                <div class="timeline-container left">
+                    <div class="timeline-content">
+                        <h3 class="font-bold text-white text-xl mb-1">Graphic Designer</h3>
+                        <p class="text-sm font-semibold text-gray-300 mb-1">BG Group.</p>
+                        <p class="text-xs text-gray-400 mb-2">Nov 2024 - Present</p>
+                        <p class="text-gray-400 leading-snug">"Graphic Designer at BG Group, specializing in branding and digital design, creating impactful visuals that strengthen brand identity.</p>
+                    </div>
+                </div>
+                <div class="timeline-container right">
+                    <div class="timeline-content">
+                        <h3 class="font-bold text-white text-xl mb-1">Jr. Executive (Graphic Designer)</h3>
+                        <p class="text-sm font-semibold text-gray-300 mb-1">New Idea & Development Ltd.</p>
+                        <p class="text-xs text-gray-400 mb-2">Mar 2024 - Jul 2024</p>
+                        <p class="text-gray-400 leading-snug">Created social media designs, brochures, and banners, specializing in construction themes to enhance brand identity.</p>
+                    </div>
+                </div>
+                <div class="timeline-container left">
+                    <div class="timeline-content">
+                        <h3 class="font-bold text-white text-xl mb-1">Junior Graphic Designer</h3>
+                        <p class="text-sm font-semibold text-gray-300 mb-1">It Next Digital.</p>
+                        <p class="text-xs text-gray-400 mb-2">Feb 2023 - Feb 2024</p>
+                        <p class="text-gray-400 leading-snug">Designed packaging, labels, and marketing creatives; ensured brand consistency and collaborated to achieve project goals.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="portfolio" class="py-16 bg-white dark:bg-gray-800 transition-colors duration-500">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-10 text-gray-900 dark:text-white">My Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="project-cards-container">
+                <a href="javascript:void(0)" class="project-card-link bg-gray-800 dark:bg-gray-700 rounded-lg shadow-lg p-6 hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 hover:bg-gray-900 dark:hover:bg-gray-600 block transition-transform duration-300" data-project-id="1">
+                    <img src="https://placehold.co/600x400/E5E7EB/4B5563?text=Project+1" alt="Image of Project 1" class="rounded-lg mb-4 w-full h-auto">
+                    <h3 class="text-2xl font-semibold text-gray-100 dark:text-white mb-2">Project Name 1</h3>
+                    <p class="text-gray-300 dark:text-gray-300 mb-4">This project involved creating an e-commerce website with a modern design and fast performance.</p>
+                    <span class="text-indigo-600 hover:text-indigo-800 font-semibold">View Details →</span>
+                </a>
+                
+                <a href="javascript:void(0)" class="project-card-link bg-gray-800 dark:bg-gray-700 rounded-lg shadow-lg p-6 hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 hover:bg-gray-900 dark:hover:bg-gray-600 block transition-transform duration-300" data-project-id="2">
+                    <img src="https://placehold.co/600x400/E5E7EB/4B5563?text=Project+2" alt="Image of Project 2" class="rounded-lg mb-4 w-full h-auto">
+                    <h3 class="text-2xl font-semibold text-gray-100 dark:text-white mb-2">Project Name 2</h3>
+                    <p class="text-gray-300 dark:text-gray-300 mb-4">A blogging platform built with a customized theme and a user-friendly CMS.</p>
+                    <span class="text-indigo-600 hover:text-indigo-800 font-semibold">View Details →</span>
+                </a>
+
+                <a href="javascript:void(0)" class="project-card-link bg-gray-800 dark:bg-gray-700 rounded-lg shadow-lg p-6 hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 hover:bg-gray-900 dark:hover:bg-gray-600 block transition-transform duration-300" data-project-id="3">
+                    <img src="https://placehold.co/600x400/E5E7EB/4B5563?text=Project+3" alt="Image of Project 3" class="rounded-lg mb-4 w-full h-auto">
+                    <h3 class="text-2xl font-semibold text-gray-100 dark:text-white mb-2">An interactive data visualization tool that easily presents complex data.</h3>
+                    <p class="text-gray-300 dark:text-gray-300 mb-4">An interactive data visualization tool that easily presents complex data.</p>
+                    <span class="text-indigo-600 hover:text-indigo-800 font-semibold">View Details →</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 bg-gray-100 dark:bg-gray-900 transition-colors duration-500 contact-section">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <h2 class="text-3xl font-bold text-center mb-4 text-gray-900 dark:text-white">Contact Me</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-600 dark:text-gray-300 mb-10">If you have any questions or would like to hire me for a project, please fill out the form below or contact me directly.</p>
+
+            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 md:p-12 flex flex-col md:flex-row gap-12">
+                <!-- Contact Info Column -->
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Contact Information</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-4">
+                            <i class="fas fa-map-marker-alt text-indigo-600 text-3xl"></i>
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-900 dark:text-white">Address</h4>
+                                <p class="text-gray-600 dark:text-gray-300">Dhaka, Bangladesh</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <i class="fas fa-envelope text-indigo-600 text-3xl"></i>
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-900 dark:text-white">Email</h4>
+                                <p class="text-gray-600 dark:text-gray-300">
+                                    <span id="email-address">nirjonfin@gmail.com</span>
+                                    <button onclick="copyToClipboard('nirjonfin@gmail.com')" class="ml-2 text-sm text-indigo-600 hover:text-indigo-800 font-semibold focus:outline-none">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <i class="fas fa-phone-alt text-indigo-600 text-3xl"></i>
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-900 dark:text-white">Phone</h4>
+                                <p class="text-gray-600 dark:text-gray-300">+880 1754 161820</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-2xl font-bold mt-8 mb-4 text-gray-900 dark:text-white">Social Media</h3>
+                    <div class="flex space-x-6 text-3xl">
+                        <a href="https://www.linkedin.com/in/sayeed-fin/" target="_blank" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 transition duration-300 transform hover:scale-125 contact-icon"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://github.com/yourprofile" target="_blank" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 transition duration-300 transform hover:scale-125 contact-icon"><i class="fab fa-github"></i></a>
+                        <a href="https://twitter.com/Sayeed_fin" target="_blank" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 transition duration-300 transform hover:scale-125 contact-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="https://behance.net/sayeed_fin" target="_blank" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 transition duration-300 transform hover:scale-125 contact-icon"><i class="fab fa-behance"></i></a>
+                    </div>
+                </div>
+
+                <!-- Contact Form Column -->
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Send Me a Message</h3>
+                    <form id="contact-form" action="#" method="POST" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Your Name</label>
+                            <input type="text" id="name" name="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white p-2">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Your Email</label>
+                            <input type="email" id="email" name="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white p-2">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Your Message</label>
+                            <textarea id="message" name="message" rows="4" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white p-2"></textarea>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="submit" class="bg-indigo-600 text-white py-2 px-6 rounded-md shadow-lg hover:bg-indigo-700 transition duration-300 font-semibold">Send Message</button>
+                        </div>
+                        <div id="form-message" class="text-center mt-4 text-green-600 hidden">Your message has been sent successfully!</div>
+                    </form>
+                </div>
+            </div>
+            <div id="copy-message" class="mt-4 text-green-600 opacity-0 transition-opacity duration-300">Email address copied!</div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-200 dark:bg-gray-700 text-center py-4 text-sm text-gray-600 dark:text-gray-300 transition-colors duration-500">
+        <p>&copy; <span id="current-year"></span> Foridul Islam. All rights reserved.</p>
+    </footer>
+
+    <!-- Project Details Modal -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content bg-gray-800 text-white dark:bg-gray-800 dark:text-white">
+            <span class="close-btn">&times;</span>
+            <h2 id="modal-title" class="text-3xl font-bold mb-4"></h2>
+            <p id="modal-description" class="text-gray-300 dark:text-gray-300 mb-8 leading-relaxed"></p>
+            <div id="modal-images" class="project-image-gallery">
+            </div>
+            <div id="modal-info"></div>
+        </div>
+    </div>
+
+    <script>
+        // Project data (replace with your actual project details)
+        const projects = [
+            {
+                id: 1,
+                title: "E-commerce Website",
+                description: "This project involved creating an e-commerce website with a modern design and fast performance. It features various products, user accounts, and a secure checkout process.",
+                images: [
+                    "https://placehold.co/800x600/E5E7EB/4B5563?text=Homepage",
+                    "https://placehold.co/800x600/D1D5DB/6B7280?text=Product+Page",
+                    "https://placehold.co/800x600/9CA3AF/FFFFFF?text=Checkout+Process"
+                ]
+            },
+            {
+                id: 2,
+                title: "Blogging Platform",
+                description: "A blogging platform built with a customized theme and a user-friendly CMS. It helps authors publish content and readers easily find their favorite topics.",
+                images: [
+                    "https://placehold.co/800x600/E5E7EB/4B5563?text=Blog+Home",
+                    "https://placehold.co/800x600/D1D5DB/6B7280?text=Article+Page",
+                    "https://placehold.co/800x600/9CA3AF/FFFFFF?text=Dashboard"
+                ]
+            },
+            {
+                id: 3,
+                title: "Data Visualization Tool",
+                description: "This tool helps present complex data in an easy and interactive way. It uses various charts and graphs to help users understand data trends and patterns.",
+                images: [
+                    "https://placehold.co/800x600/E5E7EB/4B5563?text=Dashboard+View",
+                    "https://placehold.co/800x600/D1D5DB/6B7280?text=Graph+Example",
+                    "https://placehold.co/800x600/9CA3AF/FFFFFF?text=Interactive+Chart"
+                ]
+            }
+        ];
+
+        const mobileMenu = document.getElementById('mobile-menu');
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            mobileMenu.classList.remove('translate-x-full');
+        });
+
+        document.getElementById('close-menu').addEventListener('click', function() {
+            mobileMenu.classList.add('translate-x-full');
+        });
+
+        document.querySelectorAll('.menu-link').forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.add('translate-x-full');
+            });
+        });
+
+        function copyToClipboard(text) {
+            const tempInput = document.createElement("textarea");
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            const message = document.getElementById('copy-message');
+            message.classList.remove('opacity-0', 'hidden');
+            message.classList.add('opacity-100');
+            setTimeout(() => {
+                message.classList.remove('opacity-100');
+                message.classList.add('opacity-0', 'hidden');
+            }, 2000);
+        }
+
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formMessage = document.getElementById('form-message');
+            formMessage.classList.remove('hidden');
+            this.reset();
+            setTimeout(() => {
+                formMessage.classList.add('hidden');
+            }, 3000);
+        });
+
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        const modal = document.getElementById('projectModal');
+        const closeBtn = document.querySelector('.close-btn');
+
+        document.querySelectorAll('.project-card-link').forEach(card => {
+            card.addEventListener('click', function() {
+                const projectId = parseInt(this.getAttribute('data-project-id'));
+                const project = projects.find(p => p.id === projectId);
+                
+                if (project) {
+                    document.getElementById('modal-title').textContent = project.title;
+                    document.getElementById('modal-description').textContent = project.description;
+                    const modalImagesContainer = document.getElementById('modal-images');
+                    modalImagesContainer.innerHTML = '';
+                    project.images.forEach(imageSrc => {
+                        const img = document.createElement('img');
+                        img.src = imageSrc;
+                        img.alt = `Project view for ${project.title}`;
+                        img.classList.add('rounded-lg', 'shadow-md', 'w-full', 'h-auto');
+                        modalImagesContainer.appendChild(img);
+                    });
+                    
+                    modal.style.display = 'flex';
+                }
+            });
+        });
+
+
+        
+
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
