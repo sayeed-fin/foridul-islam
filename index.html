@@ -256,6 +256,53 @@
             50% { transform: rotate(55deg) translateY(-20px); }
             100% { transform: rotate(45deg) translateY(0); }
         }
+
+           @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc(-25% * 4)); /* 4 projects, 25% width each */
+            }
+        }
+        
+        .carousel-container {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .carousel-track {
+            display: flex;
+            animation: scroll 40s linear infinite;
+        }
+        
+        /* Pause animation on hover */
+        .carousel-track:hover {
+            animation-play-state: paused;
+        }
+
+        /* Adjust animation for smaller screens using media queries */
+        @media (max-width: 1024px) { /* md */
+             @keyframes scroll {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(calc(-33.33% * 4)); /* 3 projects, 33.33% width each */
+                }
+            }
+        }
+        
+        @media (max-width: 768px) { /* sm */
+             @keyframes scroll {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(calc(-50% * 4)); /* 2 projects, 50% width each */
+                }
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-500">
@@ -403,7 +450,7 @@
     </section>
 
     <!-- Projects Section -->
-    <section id="portfolio" class="py-16 bg-white dark:bg-gray-800 transition-colors duration-500">
+    <!-- <section id="portfolio" class="py-16 bg-white dark:bg-gray-800 transition-colors duration-500">
         <div class="container mx-auto px-6">
             <h2 class="text-3xl font-bold text-center mb-10 text-gray-900 dark:text-white">My Projects</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="project-cards-container">
@@ -429,8 +476,22 @@
                 </a>
             </div>
         </div>
-    </section>
+    </section> -->
 
+    <section id="portfolio" class="py-16 bg-white dark:bg-gray-900 transition-colors duration-500">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center mb-10 text-gray-900 dark:text-white">My Projects</h2>
+            
+            <!-- Carousel Container -->
+            <div class="carousel-container relative">
+                <!-- Carousel Track with animation -->
+                <div id="carousel-track" class="carousel-track">
+                    <!-- Project cards will be dynamically inserted here by JavaScript -->
+                </div>
+            </div>
+            
+        </div>
+    </section>
     <!-- Contact Section -->
     <section id="contact" class="py-16 bg-gray-100 dark:bg-gray-900 transition-colors duration-500 contact-section">
         <div class="container mx-auto px-6 max-w-4xl">
@@ -511,7 +572,7 @@
         <p>&copy; <span id="current-year"></span> Foridul Islam. All rights reserved.</p>
     </footer>
 
-    <!-- Project Details Modal -->
+    <!-- The Modal -->
     <div id="projectModal" class="modal">
         <div class="modal-content bg-gray-800 text-white dark:bg-gray-800 dark:text-white">
             <span class="close-btn">&times;</span>
@@ -524,39 +585,7 @@
     </div>
 
     <script>
-        // Project data (replace with your actual project details)
-        const projects = [
-            {
-                id: 1,
-                title: "E-commerce Website",
-                description: "This project involved creating an e-commerce website with a modern design and fast performance. It features various products, user accounts, and a secure checkout process.",
-                images: [
-                    "https://placehold.co/800x600/E5E7EB/4B5563?text=Homepage",
-                    "https://placehold.co/800x600/D1D5DB/6B7280?text=Product+Page",
-                    "https://placehold.co/800x600/9CA3AF/FFFFFF?text=Checkout+Process"
-                ]
-            },
-            {
-                id: 2,
-                title: "Blogging Platform",
-                description: "A blogging platform built with a customized theme and a user-friendly CMS. It helps authors publish content and readers easily find their favorite topics.",
-                images: [
-                    "https://placehold.co/800x600/E5E7EB/4B5563?text=Blog+Home",
-                    "https://placehold.co/800x600/D1D5DB/6B7280?text=Article+Page",
-                    "https://placehold.co/800x600/9CA3AF/FFFFFF?text=Dashboard"
-                ]
-            },
-            {
-                id: 3,
-                title: "Data Visualization Tool",
-                description: "This tool helps present complex data in an easy and interactive way. It uses various charts and graphs to help users understand data trends and patterns.",
-                images: [
-                    "https://placehold.co/800x600/E5E7EB/4B5563?text=Dashboard+View",
-                    "https://placehold.co/800x600/D1D5DB/6B7280?text=Graph+Example",
-                    "https://placehold.co/800x600/9CA3AF/FFFFFF?text=Interactive+Chart"
-                ]
-            }
-        ];
+      
 
         const mobileMenu = document.getElementById('mobile-menu');
         document.getElementById('menu-toggle').addEventListener('click', function() {
@@ -602,34 +631,6 @@
 
         document.getElementById('current-year').textContent = new Date().getFullYear();
 
-        const modal = document.getElementById('projectModal');
-        const closeBtn = document.querySelector('.close-btn');
-
-        document.querySelectorAll('.project-card-link').forEach(card => {
-            card.addEventListener('click', function() {
-                const projectId = parseInt(this.getAttribute('data-project-id'));
-                const project = projects.find(p => p.id === projectId);
-                
-                if (project) {
-                    document.getElementById('modal-title').textContent = project.title;
-                    document.getElementById('modal-description').textContent = project.description;
-                    const modalImagesContainer = document.getElementById('modal-images');
-                    modalImagesContainer.innerHTML = '';
-                    project.images.forEach(imageSrc => {
-                        const img = document.createElement('img');
-                        img.src = imageSrc;
-                        img.alt = `Project view for ${project.title}`;
-                        img.classList.add('rounded-lg', 'shadow-md', 'w-full', 'h-auto');
-                        modalImagesContainer.appendChild(img);
-                    });
-                    
-                    modal.style.display = 'flex';
-                }
-            });
-        });
-
-
-        
 
         closeBtn.addEventListener('click', function() {
             modal.style.display = 'none';
@@ -639,6 +640,112 @@
             if (event.target === modal) {
                 modal.style.display = 'none';
             }
+        });
+    </script>
+
+        <script>
+        // Project data
+        const projects = [
+            {
+                id: 1,
+                title: "E-commerce Website",
+                description: "This project involved creating an e-commerce website with a modern design and fast performance. It features various products, user accounts, and a secure checkout process.",
+                images: [
+                    "https://placehold.co/800x600/E5E7EB/4B5563?text=Homepage",
+                    "https://placehold.co/800x600/D1D5DB/6B7280?text=Product+Page",
+                    "https://placehold.co/800x600/9CA3AF/FFFFFF?text=Checkout+Process"
+                ]
+            },
+            {
+                id: 2,
+                title: "Blogging Platform",
+                description: "A blogging platform built with a customized theme and a user-friendly CMS. It helps authors publish content and readers easily find their favorite topics.",
+                images: [
+                    "https://placehold.co/800x600/E5E7EB/4B5563?text=Blog+Home",
+                    "https://placehold.co/800x600/D1D5DB/6B7280?text=Article+Page",
+                    "https://placehold.co/800x600/9CA3AF/FFFFFF?text=Dashboard"
+                ]
+            },
+            {
+                id: 3,
+                title: "Data Visualization Tool",
+                description: "This tool helps present complex data in an easy and interactive way. It uses various charts and graphs to help users understand data trends and patterns.",
+                images: [
+                    "https://placehold.co/800x600/E5E7EB/4B5563?text=Dashboard+View",
+                    "https://placehold.co/800x600/D1D5DB/6B7280?text=Graph+Example",
+                    "https://placehold.co/800x600/9CA3AF/FFFFFF?text=Interactive+Chart"
+                ]
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const carouselTrack = document.getElementById('carousel-track');
+            const projectCardHTML = (project) => `
+                <a href="javascript:void(0)" class="flex-none w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-4 project-card-link" data-project-id="${project.id}">
+                    <div class="project-card bg-gray-800 dark:bg-gray-700 rounded-lg shadow-lg p-6 hover:shadow-2xl hover:scale-105 hover:bg-gray-900 dark:hover:bg-gray-600 transition-all duration-500 ease-in-out">
+                        <img src="${project.images[0]}" alt="Image of ${project.title}" class="rounded-lg mb-4 w-full h-auto">
+                        <h3 class="text-2xl font-semibold text-gray-100 dark:text-white mb-2">${project.title}</h3>
+                        <p class="text-gray-300 dark:text-gray-300 mb-4">${project.description.substring(0, 100)}...</p>
+                        <span class="text-indigo-600 hover:text-indigo-800 font-semibold">View Details →</span>
+                    </div>
+                </a>
+            `;
+
+            // Function to render projects
+            function renderProjects() {
+                // To create a seamless loop, we'll duplicate the projects
+                const projectsToRender = [...projects, ...projects, ...projects, ...projects];
+                
+                carouselTrack.innerHTML = '';
+                projectsToRender.forEach(project => {
+                    carouselTrack.insertAdjacentHTML('beforeend', projectCardHTML(project));
+                });
+
+                attachModalListeners();
+            }
+            
+            // Modal functionality
+            const modal = document.getElementById('projectModal');
+            const closeBtn = document.querySelector('.close-btn');
+
+            function attachModalListeners() {
+                document.querySelectorAll('.project-card-link').forEach(card => {
+                    card.addEventListener('click', function() {
+                        const projectId = parseInt(this.getAttribute('data-project-id'));
+                        const project = projects.find(p => p.id === projectId);
+                        
+                        if (project) {
+                            document.getElementById('modal-title').textContent = project.title;
+                            document.getElementById('modal-description').textContent = project.description;
+                            const modalImagesContainer = document.getElementById('modal-images');
+                            modalImagesContainer.innerHTML = '';
+                            project.images.forEach(imageSrc => {
+                                const img = document.createElement('img');
+                                img.src = imageSrc;
+                                img.alt = `Project view for ${project.title}`;
+                                img.classList.add('rounded-lg', 'shadow-md', 'w-full', 'h-auto');
+                                modalImagesContainer.appendChild(img);
+                            });
+                            
+                            modal.style.display = 'flex';
+                        }
+                    });
+                });
+            }
+
+            // Close the modal when the user clicks on <span> (x)
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            // Close the modal when the user clicks anywhere outside of the modal content
+            window.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            renderProjects();
         });
     </script>
 </body>
